@@ -4,8 +4,6 @@ import Login from "./components/auth/Login";
 import Profile from "./components/profile/Profile";
 import { isLoggedIn } from "./services/api";
 import Navbar from "./components/layout/Navbar";
-import HomePage from "./Pages/HomePage";
-import AuthPage from "./components/auth/AuthPage";
 import LandingPage from "./Pages/LandingPage";
 import LocomotiveScroll from "locomotive-scroll";
 import { useEffect, useState } from "react";
@@ -29,7 +27,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/auth" element={<AuthPage />} />
+        <Route path="/login" element={<Login/>} />
+        <Route path="/register" element={<Register />} />
         <Route
           path="/profile"
           element={isLoggedIn() ? <Profile /> : <Login />}
