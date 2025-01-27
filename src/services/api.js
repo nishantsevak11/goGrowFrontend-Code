@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Base URL for your backend
 // const API_URL = "https://gogrowproject.onrender.com/auth";
-const API_URL = "http://localhost:3000/auth";
+const API_URL = "https://gogrowproject.onrender.com/auth";
 
 
 // Register a new user
