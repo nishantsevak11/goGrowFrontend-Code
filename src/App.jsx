@@ -17,11 +17,11 @@ function App() {
   // Initialize Locomotive Scroll
   useEffect(() => {
     const scroll = new LocomotiveScroll({
-      el: document.querySelector("[data-scroll-container]"),
+      el: document.querySelector("#root"),
       smooth: true
     });
 
-    return () => scroll.destroy(); // Cleanup on unmount
+    return () => scroll.destroy(); 
   }, []);
   
   return (
