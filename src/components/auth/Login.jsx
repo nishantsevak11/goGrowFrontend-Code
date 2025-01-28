@@ -1,61 +1,95 @@
 import React, { useState } from 'react';
 import { loginUser } from '../../services/api';
 import { useNavigate } from 'react-router-dom';
+import { useForm } from "react-hook-form";
+import { TextField, Button, Snackbar, Alert, Container, Paper, Typography } from '@mui/material';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  const { register, handleSubmit, formState: { errors } } = useForm();
+
+  const handleLogin = async (data) => {
     try {
-      const response = await loginUser(email, password);
-      console.log(response);
+      const response = await loginUser(data.email, data.password);
       localStorage.setItem('token', response.data.token);
-      alert('Login successful!');
-      window.location.href = '/profile';
+      setSnackbarMessage('Login successful!');
+      setSnackbarSeverity('success');
+      setOpenSnackbar(true);
+      setTimeout(() => {
+        window.location.href = '/profile';
+      }, 1500);
     } catch (error) {
-      alert('Login failed!');
-      console.log(error);
+      setSnackbarMessage('Login failed! Invalid credentials.');
+      setSnackbarSeverity('error');
+      setOpenSnackbar(true);
     }
   };
 
   return (
-    <div className="bg-[url(https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)] w-full h-screen">
-      <div className="bg-black/30 backdrop-blur-sm w-full h-screen flex justify-center items-center">
-        <form onSubmit={handleLogin} className="flex flex-col items-center">
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="p-3 mb-4 border rounded"
+    <Container maxWidth="xs">
+      <Paper elevation={6} className="p-6 mt-20 flex flex-col items-center shadow-lg rounded-lg">
+        <Typography variant="h5" className="mb-4 text-gray-700 font-bold">Login</Typography>
+
+        <form onSubmit={handleSubmit(handleLogin)} className="flex flex-col w-full">
+          <TextField
+            label="Email"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            {...register("email", {
+              required: "Email is required",
+              pattern: {
+                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                message: "Invalid email format"
+              }
+            })}
+            error={!!errors.email}
+            helperText={errors.email?.message}
           />
-          <input
+
+          <TextField
+            label="Password"
             type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="p-3 mb-4 border rounded"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            {...register("password", {
+              required: "Password is required",
+              minLength: {
+                value: 6,
+                message: "Password must be at least 6 characters"
+              }
+            })}
+            error={!!errors.password}
+            helperText={errors.password?.message}
           />
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
+
+          <Button type="submit" variant="contained" color="primary" className="mt-4">
             Login
-          </button>
+          </Button>
         </form>
-        <button
-          onClick={() => {
-            window.location.href = '/register'; 
-          }} 
-          className="mt-4 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+
+        <Button 
+          onClick={() => navigate('/register')} 
+          variant="outlined" 
+          color="secondary" 
+          className="mt-4"
         >
           Register
-        </button>
-      </div>
-    </div>
+        </Button>
+      </Paper>
+
+      {/* Snackbar for Notifications */}
+      <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={() => setOpenSnackbar(false)}>
+        <Alert severity={snackbarSeverity} onClose={() => setOpenSnackbar(false)}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
+    </Container>
   );
 };
 
