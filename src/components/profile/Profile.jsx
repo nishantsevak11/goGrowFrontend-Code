@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getProfile } from "../../services/api";
+import { getProfile, logOut } from "../../services/api";
 import UserSettings from "../UserSettings";
 
 const Profile = () => {
@@ -61,6 +61,14 @@ const Profile = () => {
               >
                 Edit
               </button>
+
+              <button
+                 onClick={logOut}
+                 className="bg-red-600 text-white mx-10 px-4 py-2 rounded-lg hover:bg-red-700"
+              >
+                  logOut
+              </button>
+
             </div>
           )}
         </div>

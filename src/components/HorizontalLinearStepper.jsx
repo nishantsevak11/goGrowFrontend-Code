@@ -118,11 +118,12 @@ export default function HorizontalLinearStepper() {
       );
       console.log(response);
       localStorage.setItem("token", response.data.token);
-      alert("Login successful!");
+      alert("Register successful!");
       // navigate("/profile");
       window.location.href = "/profile";
     } catch (error) {
-      alert("Login failed!");
+      alert("Register failed!");
+      window.location.href = "/register";
       console.log(error);
     }
   };
@@ -177,7 +178,7 @@ export default function HorizontalLinearStepper() {
         </Stepper>
         {activeStep === steps.length ? (
           <React.Fragment>
-            <Welcome />
+            <Welcome name={personalInfo.name} handleSubmit={handleSubmit}/>
             <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
               <Box sx={{ flex: "1 1 auto" }} />
               <Button onClick={handleSubmit}>Finish</Button>

@@ -37,6 +37,10 @@ export const isLoggedIn = () => {
   return false;
 };
 
+export const logOut = ()=>{
+  localStorage.removeItem('token');
+}
+
 export const updateProfile = async (profileData) => {
   const token = localStorage.getItem("token");
 

@@ -27,8 +27,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<Login/>} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={isLoggedIn() ? <Profile /> : <Login />} />
+        <Route path="/register" element={isLoggedIn() ? <Profile /> : <Register />} />
         <Route
           path="/profile"
           element={isLoggedIn() ? <Profile /> : <Login />}
