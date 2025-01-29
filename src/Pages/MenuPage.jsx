@@ -17,7 +17,7 @@ const MenuPage = ({isMenuOpen, setIsMenuOpen}) => {
               <div className='w-full h-[1px] bg-white'></div>
               <div className='pt-7'>
                 {
-                  isLoggedIn() ? <a href='/profile' className='text-xl mt-2'>Profile</a> : <a href='/auth' className='text-xl mt-2'>Login</a>
+                  isLoggedIn() ? <a href='/profile' className='text-xl mt-2'>Profile</a> : <a href='/profile' className='text-xl mt-2'>Login</a>
                 }
                 
                 <h3 className='text-xl mt-2'>Features</h3>
