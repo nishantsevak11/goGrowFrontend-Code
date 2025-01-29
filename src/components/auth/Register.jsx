@@ -19,8 +19,8 @@ const Register = () => {
   };
 
   return (
-    <div className="bg-[url(https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)] w-full h-screen">
-      <div className="bg-black/30 backdrop-blur-sm w-full h-screen flex justify-center items-center">
+    <div className=" w-full h-screen">
+      <div className=" w-full h-screen flex justify-center items-center">
         <div className="w-full h-full py-[5%] px-[10%]">
 
           <HorizontalLinearStepper/>

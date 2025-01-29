@@ -1,143 +1,70 @@
 import React, { useState } from "react";
 import { updateProfile } from "../services/api";
+import { motion } from "framer-motion";
 
 function UserSettings({ profileData, setEditable }) {
-  const [formData, setFormData] = useState(profileData); // Initialize form data with props
+  const [formData, setFormData] = useState(profileData);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value }); // Update state based on input
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await updateProfile(formData); // Call the update API function
+      await updateProfile(formData);
       alert("Profile updated successfully!");
-      setEditable(false); // Exit edit mode
+      setEditable(false);
     } catch (error) {
       alert("Error updating profile. Please try again.");
     }
   };
 
   return (
-    <div className="bg-gray-900 p-4">
-      <h1 className="text-white text-lg font-bold mb-4">Edit User Settings</h1>
-
-      <form onSubmit={handleSubmit}>
-        {/* Name Field */}
-        <div className="mb-4">
-          <label htmlFor="name" className="text-gray-400 block mb-1">
-            Name:
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            className="bg-gray-800 text-white p-2 rounded border border-gray-700 w-full"
-          />
+    <motion.div
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="space-y-8"
+    >
+      <h1 className="text-3xl font-bold">Edit Profile</h1>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {Object.keys(profileData).map((key) => (
+            <div key={key} className="space-y-2">
+              <label htmlFor={key} className="text-gray-300 block capitalize">
+                {key.replace(/([A-Z])/g, " $1").trim()}:
+              </label>
+              <input
+                type="text"
+                id={key}
+                name={key}
+                value={formData[key]}
+                onChange={handleInputChange}
+                className="w-full bg-gray-700 text-white p-3 rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none transition duration-300"
+              />
+            </div>
+          ))}
         </div>
 
-        {/* Email Field */}
-        <div className="mb-4">
-          <label htmlFor="email" className="text-gray-400 block mb-1">
-            Email:
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            className="bg-gray-800 text-white p-2 rounded border border-gray-700 w-full"
-          />
+        <div className="flex justify-end space-x-4">
+          <button
+            type="button"
+            onClick={() => setEditable(false)}
+            className="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition duration-300"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition duration-300"
+          >
+            Save Changes
+          </button>
         </div>
-
-        {/* Status Field */}
-        <div className="mb-4">
-          <label htmlFor="status" className="text-gray-400 block mb-1">
-            Status:
-          </label>
-          <input
-            type="text"
-            id="status"
-            name="status"
-            value={formData.status}
-            onChange={handleInputChange}
-            className="bg-gray-800 text-white p-2 rounded border border-gray-700 w-full"
-          />
-        </div>
-
-        {/* Platform Field */}
-        <div className="mb-4">
-          <label htmlFor="platform" className="text-gray-400 block mb-1">
-            Platform:
-          </label>
-          <input
-            type="text"
-            id="platform"
-            name="platform"
-            value={formData.platform}
-            onChange={handleInputChange}
-            className="bg-gray-800 text-white p-2 rounded border border-gray-700 w-full"
-          />
-        </div>
-
-        {/* Categories Field */}
-        <div className="mb-4">
-          <label htmlFor="categories" className="text-gray-400 block mb-1">
-            Categories:
-          </label>
-          <input
-            type="text"
-            id="categories"
-            name="categories"
-            value={formData.categories}
-            onChange={handleInputChange}
-            className="bg-gray-800 text-white p-2 rounded border border-gray-700 w-full"
-          />
-        </div>
-
-        {/* Send Time Field */}
-        <div className="mb-4">
-          <label htmlFor="sendTime" className="text-gray-400 block mb-1">
-            Send Time:
-          </label>
-          <input
-            type="text"
-            id="sendTime"
-            name="sendTime"
-            value={formData.sendTime}
-            onChange={handleInputChange}
-            className="bg-gray-800 text-white p-2 rounded border border-gray-700 w-full"
-          />
-        </div>
-
-        {/* AI Prompt Field */}
-        <div className="mb-4">
-          <label htmlFor="AiPrompt" className="text-gray-400 block mb-1">
-            AI Prompt:
-          </label>
-          <input
-            type="text"
-            id="AiPrompt"
-            name="AiPrompt"
-            value={formData.AiPrompt}
-            onChange={handleInputChange}
-            className="bg-gray-800 text-white p-2 rounded border border-gray-700 w-full"
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="bg-blue-500 text-white p-3 rounded hover:bg-blue-600 w-full"
-        >
-          Save
-        </button>
       </form>
-    </div>
+    </motion.div>
   );
 }
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { loginUser } from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
-import { TextField, Button, Snackbar, Alert, Container, Paper, Typography } from '@mui/material';
+import { TextField, Button, Snackbar, Alert, Container, Paper, Typography, Box } from '@mui/material';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -31,61 +31,124 @@ const Login = () => {
 
   return (
     <Container maxWidth="xs">
-      <Paper elevation={6} className="p-6 mt-20 flex flex-col items-center shadow-lg rounded-lg">
-        <Typography variant="h5" className="mb-4 text-gray-700 font-bold">Login</Typography>
-
-        <form onSubmit={handleSubmit(handleLogin)} className="flex flex-col w-full">
-          <TextField
-            label="Email"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            {...register("email", {
-              required: "Email is required",
-              pattern: {
-                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                message: "Invalid email format"
-              }
-            })}
-            error={!!errors.email}
-            helperText={errors.email?.message}
-          />
-
-          <TextField
-            label="Password"
-            type="password"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            {...register("password", {
-              required: "Password is required",
-              minLength: {
-                value: 6,
-                message: "Password must be at least 6 characters"
-              }
-            })}
-            error={!!errors.password}
-            helperText={errors.password?.message}
-          />
-
-          <Button type="submit" variant="contained" color="primary" className="mt-4">
-            Login
-          </Button>
-        </form>
-
-        <Button 
-          onClick={() => navigate('/register')} 
-          variant="outlined" 
-          color="secondary" 
-          className="mt-4"
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '100vh',
+        }}
+      >
+        <Paper
+          elevation={6}
+          sx={{
+            padding: 4,
+            width: '100%',
+            maxWidth: 400,
+            borderRadius: 2,
+            boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)',
+          }}
         >
-          Register
-        </Button>
-      </Paper>
+          <Typography
+            variant="h4"
+            sx={{
+              mb: 4,
+              textAlign: 'center',
+              color: 'primary.main',
+              fontWeight: 'bold',
+            }}
+          >
+            Login
+          </Typography>
+
+          <form onSubmit={handleSubmit(handleLogin)}>
+            <TextField
+              label="Email"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                  message: "Invalid email format"
+                }
+              })}
+              error={!!errors.email}
+              helperText={errors.email?.message}
+              sx={{ mb: 2 }}
+            />
+
+            <TextField
+              label="Password"
+              type="password"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              {...register("password", {
+                required: "Password is required",
+                minLength: {
+                  value: 6,
+                  message: "Password must be at least 6 characters"
+                }
+              })}
+              error={!!errors.password}
+              helperText={errors.password?.message}
+              sx={{ mb: 3 }}
+            />
+
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              sx={{
+                py: 1.5,
+                mb: 2,
+                borderRadius: 1,
+                fontWeight: 'bold',
+                backgroundColor: 'primary.main',
+                '&:hover': {
+                  backgroundColor: 'primary.dark',
+                },
+              }}
+            >
+              Login
+            </Button>
+
+            <Button
+              onClick={() => navigate('/register')}
+              variant="outlined"
+              fullWidth
+              sx={{
+                py: 1.5,
+                borderRadius: 1,
+                fontWeight: 'bold',
+                color: 'secondary.main',
+                borderColor: 'secondary.main',
+                '&:hover': {
+                  borderColor: 'secondary.dark',
+                  color: 'secondary.dark',
+                },
+              }}
+            >
+              Register
+            </Button>
+          </form>
+        </Paper>
+      </Box>
 
       {/* Snackbar for Notifications */}
-      <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={() => setOpenSnackbar(false)}>
-        <Alert severity={snackbarSeverity} onClose={() => setOpenSnackbar(false)}>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert
+          severity={snackbarSeverity}
+          onClose={() => setOpenSnackbar(false)}
+          sx={{ width: '100%' }}
+        >
           {snackbarMessage}
         </Alert>
       </Snackbar>
