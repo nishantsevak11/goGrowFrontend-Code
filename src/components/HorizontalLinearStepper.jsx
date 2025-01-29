@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { registerUser } from "../services/api";
 import { useMediaQuery } from "react-responsive";
 import TimePicker from "react-time-picker"; // Importing the improved time picker
 import "react-time-picker/dist/TimePicker.css"; // Import the CSS for the time picker
@@ -78,6 +79,19 @@ export default function HorizontalLinearStepper() {
   const handleSubmit = async () => {
     try {
       // Simulate your registration function here
+      const response = await registerUser(
+        personalInfo.name,
+        personalInfo.email,
+        personalInfo.password,
+        serviceQuestions.sendTime,
+        serviceQuestions.platform,
+        serviceQuestions.categories,
+        serviceQuestions.AiPrompt
+      );
+      console.log(response);
+      localStorage.setItem("token", response.data.token);
+      alert("Register successful!");
+      window.location.href = "/profile";
       alert("Register successful!");
     } catch (error) {
       alert("Register failed!");
