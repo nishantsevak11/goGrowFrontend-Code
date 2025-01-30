@@ -15,27 +15,24 @@ import UserReviews from "../components/UserReviews";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const LandingPage = ({isMenuOpen}) => {
-
+const LandingPage = ({ isMenuOpen }) => {
   const videoRef = useRef();
 
-  useGSAP(()=>{
-      gsap.to(videoRef.current, {
+  useGSAP(() => {
+    gsap.to(videoRef.current, {
+      scrollTrigger: {
+        trigger: videoRef.current,
+        start: "bottom 0",
+        end: "bottom -100%",
+        scrub: true,
+        // markers:true
+      },
 
-        scrollTrigger: {
-            trigger: videoRef.current,
-            start: "bottom 0",
-            end: "bottom -100%",
-            scrub:true,
-            // markers:true
-        },
-
-        width:"80%",
-        duration:2,
-        delay:1
-      });
-  })
-
+      width: "80%",
+      duration: 2,
+      delay: 1,
+    });
+  });
 
   // const [images, setImages] = useState([
   //   {
@@ -93,26 +90,36 @@ const LandingPage = ({isMenuOpen}) => {
   // });
 
   return (
-    <div className={`w-full pt-10 relative ${isMenuOpen ? 'overflow-hidden' : '' }`}>
+    <div
+      className={`w-full pt-10 relative ${isMenuOpen ? "overflow-hidden" : ""}`}
+    >
       <div className="flex relative py-[5vh]">
         <div className="textstructure pt-20 lg:pt-[20vh] lg:px-20 px-5">
           {["Redefine Your", "Workday", "with us"].map((item, index) => {
             return (
               <div className="masker">
-                <div className="w-fit flex items-end ">
+                <div className="w-fit flex items-center justify-center gap-2">
                   {index === 1 && (
                     <motion.div
-                      initial={{ width: 0 , opacity:1 }}
+                      initial={{ width: 0, opacity: 1 }}
                       animate={{ width: "9vw" }}
-                      transition={{ ease: [0.76, 0, 0.24, 1], duration:1 ,delay:0.5}}
-                      className="w-[8vw] rounded-md h-[5.7vw] -top-[1vw] relative"
+                      transition={{
+                        ease: [0.76, 0, 0.24, 1],
+                        duration: 1,
+                        delay: 0.5,
+                      }}
+                      className="w-[10vw] lg:w-[8vw]  h-[10vw]  lg:h-[7.5vw] -top-[1vw] relative"
                     >
-                      <img src="./sun.png" className="w-full mt-2 h-full object-contain " alt="" />
+                      <img
+                        src="./sun.png"
+                        className="w-full lg:mt-2  h-full object-contain "
+                        alt=""
+                      />
                     </motion.div>
                   )}
                   <h1
                     key={index}
-                    className="uppercase text-[7vw] tracking-tighter leading-[6vw]"
+                    className="uppercase lg:text-[7vw] text-5xl tracking-tighter lg:leading-[6vw] "
                   >
                     {item}
                   </h1>
@@ -138,25 +145,19 @@ const LandingPage = ({isMenuOpen}) => {
         </div> */}
       </div>
 
+      <VideoAnimation />
 
-      
+      <AboutSection />
 
-      <VideoAnimation/>
+      <FeaturesSection />
 
+      <HowItWorks />
 
-       <AboutSection/>
+      <UserReviews />
 
-       <FeaturesSection/>
-
-       <HowItWorks/>
-
-       <UserReviews/>
-
-      <DemoPage/>
-      <DemoPage/>
-      <DemoPage/>
-
-    
+      <DemoPage />
+      <DemoPage />
+      <DemoPage />
     </div>
   );
 };

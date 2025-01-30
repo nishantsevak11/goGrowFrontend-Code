@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { loginUser } from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
-import { TextField, Button, Snackbar, Alert, Container, Paper, Typography, Box } from '@mui/material';
 
 const Login = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
@@ -14,7 +14,9 @@ const Login = () => {
 
   const handleLogin = async (data) => {
     try {
+      setIsLoading(true);
       const response = await loginUser(data.email, data.password);
+      setIsLoading(false);
       localStorage.setItem('token', response.data.token);
       setSnackbarMessage('Login successful!');
       setSnackbarSeverity('success');
@@ -24,49 +26,31 @@ const Login = () => {
       }, 1500);
     } catch (error) {
       setSnackbarMessage('Login failed! Invalid credentials.');
+      setIsLoading(false);
       setSnackbarSeverity('error');
       setOpenSnackbar(true);
     }
   };
 
-  return (
-    <Container maxWidth="xs">
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          minHeight: '100vh',
-        }}
-      >
-        <Paper
-          elevation={6}
-          sx={{
-            padding: 4,
-            width: '100%',
-            maxWidth: 400,
-            borderRadius: 2,
-            boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)',
-          }}
-        >
-          <Typography
-            variant="h4"
-            sx={{
-              mb: 4,
-              textAlign: 'center',
-              color: 'primary.main',
-              fontWeight: 'bold',
-            }}
-          >
-            Login
-          </Typography>
+  useEffect(() => {
+    if (openSnackbar) {
+      const timer = setTimeout(() => {
+        setOpenSnackbar(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [openSnackbar]);
 
-          <form onSubmit={handleSubmit(handleLogin)}>
-            <TextField
-              label="Email"
-              variant="outlined"
-              fullWidth
-              margin="normal"
+  return (
+    <div className="flex items-center justify-center min-h-screen ">
+      <div className="text-white p-6 rounded-xl shadow-md w-full max-w-sm">
+        <h4 className="text-3xl font-bold text-center  mb-4">Login</h4>
+        <form onSubmit={handleSubmit(handleLogin)}>
+          <div className="mb-4">
+            <label className="block ">Email</label>
+            <input
+              type="email"
+              className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               {...register("email", {
                 required: "Email is required",
                 pattern: {
@@ -74,17 +58,15 @@ const Login = () => {
                   message: "Invalid email format"
                 }
               })}
-              error={!!errors.email}
-              helperText={errors.email?.message}
-              sx={{ mb: 2 }}
             />
+            {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+          </div>
 
-            <TextField
-              label="Password"
+          <div className="mb-4">
+            <label className="block ">Password</label>
+            <input
               type="password"
-              variant="outlined"
-              fullWidth
-              margin="normal"
+              className="w-full p-2 text-black border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               {...register("password", {
                 required: "Password is required",
                 minLength: {
@@ -92,67 +74,33 @@ const Login = () => {
                   message: "Password must be at least 6 characters"
                 }
               })}
-              error={!!errors.password}
-              helperText={errors.password?.message}
-              sx={{ mb: 3 }}
             />
+            {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+          </div>
 
-            <Button
-              type="submit"
-              variant="contained"
-              fullWidth
-              sx={{
-                py: 1.5,
-                mb: 2,
-                borderRadius: 1,
-                fontWeight: 'bold',
-                backgroundColor: 'primary.main',
-                '&:hover': {
-                  backgroundColor: 'primary.dark',
-                },
-              }}
-            >
-              Login
-            </Button>
+          <button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg transition duration-200"
+            disabled={isLoading}
+          >
+            {isLoading ? "Loading..." : "Login"}
+          </button>
+        </form>
 
-            <Button
-              onClick={() => navigate('/register')}
-              variant="outlined"
-              fullWidth
-              sx={{
-                py: 1.5,
-                borderRadius: 1,
-                fontWeight: 'bold',
-                color: 'secondary.main',
-                borderColor: 'secondary.main',
-                '&:hover': {
-                  borderColor: 'secondary.dark',
-                  color: 'secondary.dark',
-                },
-              }}
-            >
-              Register
-            </Button>
-          </form>
-        </Paper>
-      </Box>
-
-      {/* Snackbar for Notifications */}
-      <Snackbar
-        open={openSnackbar}
-        autoHideDuration={3000}
-        onClose={() => setOpenSnackbar(false)}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert
-          severity={snackbarSeverity}
-          onClose={() => setOpenSnackbar(false)}
-          sx={{ width: '100%' }}
+        <button
+          onClick={() => navigate('/register')}
+          className="w-full mt-2 border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-bold py-2 rounded-lg transition duration-200"
         >
+          Register
+        </button>
+      </div>
+
+      {openSnackbar && (
+        <div className={`fixed top-5 left-1/2 transform -translate-x-1/2 p-4 rounded-lg shadow-lg ${snackbarSeverity === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white`}>
           {snackbarMessage}
-        </Alert>
-      </Snackbar>
-    </Container>
+        </div>
+      )}
+    </div>
   );
 };
 

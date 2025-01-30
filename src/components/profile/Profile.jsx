@@ -48,7 +48,10 @@ const Profile = () => {
                     Edit Profile
                   </button>
                   <button
-                    onClick={logOut}
+                    onClick={()=> {
+                      logOut();
+                      location.reload();
+                    }}
                     className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition duration-300"
                   >
                     Log Out

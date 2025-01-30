@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { CgProfile } from "react-icons/cg";
 import MenuPage from "../../Pages/MenuPage";
 import { Navigate, useNavigate } from "react-router-dom";
+import { isLoggedIn } from "../../services/api";
 
 
 const Navbar = ({ isMenuOpen, setIsMenuOpen }) => {
@@ -60,8 +61,10 @@ const Navbar = ({ isMenuOpen, setIsMenuOpen }) => {
                 onClick={() => <Navigate to="/profile" />}
                 className="max-w-[10vw] border border-red-100 px-10 py-3"
               >
-                <button onClick={() => navigate('/profile')}>
-                <CgProfile/>
+                <button onClick={() => {window.location.href = "/profile"}}>
+                {
+                  isLoggedIn() ? <CgProfile/> : "Login"
+                }
                 </button>
               </div>
             </div>
