@@ -3,24 +3,17 @@ import axios from "axios";
 // Base URL for your backend
 const API_URL = "https://gogrowproject.onrender.com/auth";
 
-
 // Register a new user
 export const registerUser = (
   name,
   email,
   password,
-  sendTime,
-  platform,
-  categories,
   AiPrompt
 ) => {
   return axios.post(`${API_URL}/register`, {
     name,
     email,
     password,
-    sendTime,
-    platform,
-    categories,
     AiPrompt,
   });
 };
@@ -37,9 +30,9 @@ export const isLoggedIn = () => {
   return false;
 };
 
-export const logOut = ()=>{
-  localStorage.removeItem('token');
-}
+export const logOut = () => {
+  localStorage.removeItem("token");
+};
 
 export const updateProfile = async (profileData) => {
   const token = localStorage.getItem("token");
@@ -56,7 +49,10 @@ export const updateProfile = async (profileData) => {
     );
     return response.data; // Return the updated profile data or a success message
   } catch (error) {
-    console.error("Error updating profile:", error.response?.data || error.message);
+    console.error(
+      "Error updating profile:",
+      error.response?.data || error.message
+    );
     throw new Error("Could not update the profile");
   }
 };

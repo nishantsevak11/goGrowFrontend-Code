@@ -66,7 +66,6 @@ const Profile = () => {
                     <p><span className="font-medium">Email:</span> {profileData.email}</p>
                     <p><span className="font-medium">Status:</span> {profileData.status}</p>
                     <p><span className="font-medium">Platform:</span> {profileData.platform}</p>
-                    <p><span className="font-medium">Send Time:</span> {profileData.sendTime}</p>
                   </div>
                 </div>
 
