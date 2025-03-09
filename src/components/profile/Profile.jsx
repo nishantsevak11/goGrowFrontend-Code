@@ -35,14 +35,14 @@ const Profile = () => {
       <div className="relative w-[20%] h-full border-1 border-gray-400 bg-gray-800 p-6">
         {/* Profile view */}
 
-        <div className="w-full flex items-center">
+        <div className="w-full flex items-center justify-center">
           <div className="bg-gray-400 w-[100px] h-[100px] rounded-full flex justify-center items-center">
             profile
           </div>
-          <div>
+          {/* <div>
             <p className="text-center">{profileData.name || "Name"}</p>
             <p className="text-center">{profileData.email}</p>
-          </div>
+          </div> */}
         </div>
 
         {/* Navigation Section  */}
