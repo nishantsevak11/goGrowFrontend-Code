@@ -1,0 +1,56 @@
+/* FeaturesSection.css */
+.features-section-container {
+    background-color: #1a1a1a; /* Dark background to match the theme */
+    color: #ffffff; /* White text for contrast */
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* Subtle gradient overlay for depth */
+  .features-section-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.8));
+    z-index: 1;
+  }
+  
+  /* Ensure content is above the overlay */
+  .features-section-container > * {
+    position: relative;
+    z-index: 2;
+  }
+  
+  /* Feature Card Styling */
+  .feature-card {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 1024px) {
+    .features-section-container .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 640px) {
+    .features-section-container .grid {
+      grid-template-columns: 1fr;
+    }
+  
+    .features-section-container h1 {
+      font-size: 2.5rem !important;
+    }
+  
+    .features-section-container p {
+      font-size: 1rem !important;
+    }
+  
+    .feature-card img {
+      height: 40vh !important;
+    }
+  }

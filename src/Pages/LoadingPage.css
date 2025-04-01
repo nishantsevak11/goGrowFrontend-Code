@@ -1,0 +1,68 @@
+/* LoadingPage.css */
+.loading-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #1a1a1a; /* Dark background to match the theme */
+    overflow: hidden;
+    z-index: 99999;
+  }
+  
+  /* Glowing Content Container */
+  .loading-content {
+    position: relative;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    backdrop-filter: blur(10px);
+    background: rgba(26, 26, 26, 0.9);
+  }
+  
+  /* Particle Effects */
+  .particle-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  
+  .particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: rgba(255, 215, 0, 0.5);
+    border-radius: 50%;
+    filter: blur(2px);
+  }
+  
+  /* Text Styling */
+  .textstructure .masker {
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .loading-content {
+      width: 95%;
+      height: 85%;
+      padding: 1.5rem;
+    }
+  
+    .textstructure h1 {
+      font-size: 2.5rem !important;
+    }
+  
+    .loading-content .text-4xl {
+      font-size: 1.75rem !important;
+    }
+  
+    .loading-content .w-12 {
+      width: 2.5rem !important;
+      height: 2.5rem !important;
+    }
+  }

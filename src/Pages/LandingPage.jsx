@@ -3,7 +3,6 @@ import React, { useRef, useState } from "react";
 import Marque from "../components/TextMarque";
 import TextMarque from "../components/TextMarque";
 import MenuPage from "./MenuPage";
-import DemoPage from "./DemoPage";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import gsap from "gsap";
@@ -12,6 +11,7 @@ import AboutSection from "../components/AboutSection";
 import FeaturesSection from "../components/FeaturesSection";
 import HowItWorks from "../components/HowItWorks";
 import UserReviews from "../components/UserReviews";
+import Footer from "./Footer";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -154,10 +154,8 @@ const LandingPage = ({ isMenuOpen }) => {
       <HowItWorks />
 
       <UserReviews />
+      <Footer/>
 
-      <DemoPage />
-      <DemoPage />
-      <DemoPage />
     </div>
   );
 };

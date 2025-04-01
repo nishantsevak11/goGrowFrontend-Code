@@ -3,173 +3,180 @@ import { getProfile, logOut } from "../../services/api";
 import UserSettings from "../UserSettings";
 import { motion } from "framer-motion";
 import { CiLogout } from "react-icons/ci";
+import { FaUser, FaCog } from "react-icons/fa";
 
 const Profile = () => {
   const [profileData, setProfileData] = useState(null);
   const [editable, setEditable] = useState(false);
   const [currentTab, setCurrentTab] = useState("profile");
-
-  function handleNavigation() {}
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const data = await getProfile();
-      console.log(data);
-      setProfileData(data);
+      try {
+        setIsLoading(true);
+        const data = await getProfile();
+        setProfileData(data);
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      } finally {
+        setIsLoading(false);
+      }
     };
-
     fetchProfile();
   }, []);
 
-  function handleEdit() {
-    setEditable(!editable);
-  }
+  const handleLogout = () => {
+    logOut();
+    window.location.reload();
+  };
+
+  const sidebarVariants = {
+    hidden: { x: -50, opacity: 0 },
+    visible: { x: 0, opacity: 1 },
+  };
+
+  const contentVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { delay: 0.2 } },
+  };
 
   return (
-    <div>
-      {
-        profileData ? (
-          <div className="text-white h-screen w-full flex items-center p-6 overflow-hidden">
-      {/* SideBar */}
-
-      <div className="relative w-[20%] h-full border-1 border-gray-400 bg-gray-800 p-6">
-        {/* Profile view */}
-
-        <div className="w-full flex items-center justify-center">
-          <div className="bg-gray-400 w-[100px] h-[100px] rounded-full flex justify-center items-center">
-            profile
-          </div>
-          {/* <div>
-            <p className="text-center">{profileData.name || "Name"}</p>
-            <p className="text-center">{profileData.email}</p>
-          </div> */}
+    <div className="min-h-screen bg-gray-900 text-white">
+      {isLoading ? (
+        <div className="flex items-center justify-center h-screen">
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity }}
+            className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full"
+          />
         </div>
-
-        {/* Navigation Section  */}
-
-        <div className="mt-20">
-          <ul className="">
-            <li
-              className="cursor-pointer mb-2"
-              onClick={() => setCurrentTab("profile")}
-            >
-              Profile
-            </li>
-            <li
-              className="cursor-pointer"
-              onClick={() => setCurrentTab("settings")}
-            >
-              Settings
-            </li>
-          </ul>
-        </div>
-
-        <div className="absolute bottom-0 w-full cursor-pointer  flex gap-2 items-center text-xl"
-        
-            onClick={() => {
-              logOut();
-              location.reload();
-            }}
+      ) : (
+        <div className="flex flex-col md:flex-row h-screen overflow-hidden">
+          {/* Sidebar */}
+          <motion.aside
+            variants={sidebarVariants}
+            initial="hidden"
+            animate="visible"
+            className="md:w-64 bg-gray-800 p-6 flex-shrink-0 border-r border-gray-700"
           >
-            <CiLogout /> Log Out
-          
-        </div>
-      </div>
+            <div className="flex flex-col h-full">
+              <div className="flex items-center justify-center mb-8">
+                <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-3xl font-bold">
+                  {profileData?.name?.charAt(0) || "U"}
+                </div>
+              </div>
 
-      {/* Main Section */}
+              <nav className="flex-1">
+                <ul className="space-y-2">
+                  {[
+                    { id: "profile", label: "Profile", icon: FaUser },
+                    { id: "settings", label: "Settings", icon: FaCog },
+                  ].map((item) => (
+                    <li key={item.id}>
+                      <button
+                        onClick={() => setCurrentTab(item.id)}
+                        className={`w-full flex items-center p-3 rounded-lg transition-colors ${
+                          currentTab === item.id
+                            ? "bg-blue-600 text-white"
+                            : "text-gray-300 hover:bg-gray-700"
+                        }`}
+                      >
+                        <item.icon className="mr-3" />
+                        {item.label}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
 
-      <div className=" w-[80%] h-full">
-        {currentTab == "profile" ? (
-          <div className="flex justify-center items-center p-6">
-            {profileData ? (
-              <div className="rounded-3xl p-8 lg:p-12 shadow-2xl w-full h-screen ">
+              <button
+                onClick={handleLogout}
+                className="flex items-center p-3 mt-auto text-red-400 hover:bg-gray-700 rounded-lg transition-colors"
+              >
+                <CiLogout className="mr-3" />
+                Log Out
+              </button>
+            </div>
+          </motion.aside>
+
+          {/* Main Content */}
+          <motion.main
+            variants={contentVariants}
+            initial="hidden"
+            animate="visible"
+            className="flex-1 p-6 md:p-8 overflow-y-auto"
+          >
+            {currentTab === "profile" ? (
+              <div className="max-w-4xl mx-auto">
                 {editable ? (
                   <UserSettings
                     profileData={profileData}
                     setEditable={setEditable}
                   />
                 ) : (
-                  <div className="space-y-8">
-                    <div className="flex justify-between items-center">
-                      <h1 className="text-4xl font-bold">
-                        Welcome, {profileData.name}
+                  <div className="space-y-6">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                      <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                        Welcome, {profileData?.name || "User"}
                       </h1>
-                      <div className="lg:flex md:flex flex-col space-x-2 ">
-                        <button
-                          onClick={handleEdit}
-                          className="bg-blue-600 text-white px-6 py-2 mb-2 rounded-lg hover:bg-blue-700 transition duration-300"
-                        >
-                          Edit Profile
-                        </button>
-                        {/* <button
-                          onClick={() => {
-                            logOut();
-                            location.reload();
-                          }}
-                          className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition duration-300"
-                        >
-                          Log Out
-                        </button> */}
-                      </div>
+                      <button
+                        onClick={() => setEditable(true)}
+                        className="px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-all duration-300 transform hover:scale-105"
+                      >
+                        Edit Profile
+                      </button>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      <div className="bg-gray-700 p-6 rounded-2xl">
-                        <h2 className="text-2xl font-semibold mb-4">
-                          Personal Details
-                        </h2>
-                        <div className="space-y-3">
-                          <p>
-                            <span className="font-medium">Email:</span>{" "}
-                            {profileData.email}
-                          </p>
-                          <p>
-                            <span className="font-medium">Status:</span>{" "}
-                            {profileData.status}
-                          </p>
-                          <p>
-                            <span className="font-medium">Platform:</span>{" "}
-                            {profileData.platform}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="bg-gray-700 p-6 rounded-2xl">
-                        <h2 className="text-2xl font-semibold mb-4">
-                          Service Details
-                        </h2>
-                        <div className="space-y-3">
-                          <p>
-                            <span className="font-medium">AI Prompt:</span>{" "}
-                            {profileData.AiPrompt}
-                          </p>
-                          <p>
-                            <span className="font-medium">Notifications:</span>{" "}
-                            {profileData.notifications}
-                          </p>
-                        </div>
-                      </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <ProfileCard
+                        title="Personal Details"
+                        data={[
+                          { label: "Email", value: profileData?.email },
+                          { label: "Status", value: profileData?.status },
+                          { label: "Platform", value: profileData?.platform },
+                        ]}
+                      />
+                      <ProfileCard
+                        title="Service Details"
+                        data={[
+                          { label: "AI Prompt", value: profileData?.AiPrompt },
+                          {
+                            label: "Notifications",
+                            value: profileData?.notifications,
+                          },
+                        ]}
+                      />
                     </div>
                   </div>
                 )}
               </div>
             ) : (
-              <p className="text-center text-gray-400">Loading profile...</p>
+              <div className="max-w-4xl mx-auto">
+                <h1 className="text-3xl font-bold mb-6">Settings</h1>
+                {/* Add settings content here */}
+              </div>
             )}
-          </div>
-        ) : (
-          <div>
-            <h1>Settings</h1>
-          </div>
-        )}
-      </div>
-    </div>
-        ):(
-          <p>Loading...</p>
-        )
-      }
+          </motion.main>
+        </div>
+      )}
     </div>
   );
 };
+
+// Reusable Profile Card Component
+const ProfileCard = ({ title, data }) => (
+  <div className="bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+    <h2 className="text-xl font-semibold mb-4 text-blue-400">{title}</h2>
+    <div className="space-y-3">
+      {data.map((item) => (
+        <p key={item.label} className="text-gray-300">
+          <span className="font-medium text-white">{item.label}:</span>{" "}
+          {item.value || "Not specified"}
+        </p>
+      ))}
+    </div>
+  </div>
+);
 
 export default Profile;

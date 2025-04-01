@@ -1,0 +1,70 @@
+/* HowItWorks.css */
+.how-it-works-container {
+    background-color: #1a1a1a; /* Dark background to match the theme */
+    color: #ffffff; /* White text for contrast */
+    padding: 4rem 1rem;
+    position: relative;
+    overflow: hidden;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Subtle gradient overlay for depth */
+  .how-it-works-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.8));
+    z-index: 1;
+  }
+  
+  /* Ensure content is above the overlay */
+  .how-it-works-container > * {
+    position: relative;
+    z-index: 2;
+  }
+  
+  /* Step Circle Styling */
+  .step-circle {
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+  }
+  
+  /* Glowing Line Effect */
+  .glow-line {
+    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .how-it-works-container {
+      padding: 2rem 0.5rem;
+    }
+  
+    .how-it-works-container h4 {
+      font-size: 2.5rem !important;
+    }
+  
+    .how-it-works-container h5 {
+      font-size: 1.25rem !important;
+    }
+  
+    .how-it-works-container p {
+      font-size: 0.875rem !important;
+    }
+  
+    .step-circle {
+      width: 40px !important;
+      height: 40px !important;
+    }
+  
+    .how-it-works-container svg {
+      height: 10vh !important;
+    }
+  }
